@@ -21,6 +21,7 @@ document.querySelectorAll('textarea[name="Post"]').forEach(
 						if (
 							!anchor ||
 							!anchor.textContent ||
+							anchor.href.startsWith("javascript:") ||
 							!new URL(anchor.href).searchParams.has("showuser")
 						)
 							continue;
