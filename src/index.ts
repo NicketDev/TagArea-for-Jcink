@@ -16,17 +16,19 @@ document.querySelectorAll('textarea[name="Post"]').forEach(
 					const doc = parser.parseFromString(html, "text/html");
 					const anchors = doc.querySelectorAll("a");
 					const names = new Set<string>();
-					for (let i = 0, l = anchors.length; i < l; i++) {
-						const anchor = anchors[i];
-						if (
-							!anchor ||
-							!anchor.textContent ||
-							anchor.href.startsWith("javascript:") ||
-							!new URL(anchor.href).searchParams.has("showuser")
-						)
-							continue;
-						names.add(anchor.textContent);
-					}
+					for (let i = 0, l = anchors.length; i < l; i++)
+						try {
+							const anchor = anchors[i];
+							const url = new URL(anchor?.href as string);
+							if (
+								!anchor ||
+								!anchor.textContent ||
+								url.protocol === "javascript:" ||
+								!url.searchParams.has("showuser")
+							)
+								continue;
+							names.add(anchor.textContent);
+						} catch {}
 					return Array.from(names).filter((name) =>
 						name.toLowerCase().startsWith(search.toLowerCase())
 					);
